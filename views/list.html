@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表页</title>
+    <style>
+        img{
+            max-width: 600px;
+        }
+
+        .del{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <ul id="ctn">
+        <li>
+            <a href=""><img src="" alt=""></a>
+        </li>
+    </ul>
+    <a href="/">返回主页</a>
+</div>
+<script src="/static/js/jquery.js"></script>
+<script>
+    console.log("hello")
+    function init() {
+        $.get("/api/list",{},function(resp){
+            console.log(resp)
+            var html = [];
+            for(var i = 0;i<resp.length;i++){
+                html.push('<li><a href="/detail?id='+resp[i].id+'"><img src="'+resp[i].path+'" alt="未发现"></a>  备注:'+resp[i].note+' <button class="del" onclick="del('+resp[i].id+')">删除</button></li>')
+            }
+            document.getElementById("ctn").innerHTML=html.join("");
+        },"json")
+    }
+    init()
+    function del(id){
+        $.get("/api/del",{id:id},function(resp){
+            if (resp == "删除成功"){
+                init();
+            }else{
+                alert("删除失败")
+            }
+        })
+    }
+</script>
+</body>
+</html>
